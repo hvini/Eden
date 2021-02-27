@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "171235389928",
+    "project_id": "eden-be8d5",
+    "storage_bucket": "eden-be8d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171235389928:android:27495feb550c23e088745d",
+        "android_client_info": {
+          "package_name": "com.facens.eden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171235389928-2h364gdar8so87o3fcjh05m9g3dnk38e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV22mpjtRqepDBGAxz1HLy4mo6ZSMSuy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171235389928-2h364gdar8so87o3fcjh05m9g3dnk38e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
