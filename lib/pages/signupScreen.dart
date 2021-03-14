@@ -1,3 +1,4 @@
+import 'package:eden/pages/feedScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:eden/controllers/authentications.dart';
@@ -21,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => LoginScreen(),
+              builder: (context) => FeedScreen(uid: value.uid)
           ));
         }
       });
@@ -39,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.0),
                 child: Text(
-                  "Signup here",
+                  "Sign Up",
                   style: TextStyle(
                     fontSize: 30.0,
                   ),
@@ -96,6 +97,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                },
+                child: Text(
+                  "Have an account? Login"
                 ),
               ),
             ],

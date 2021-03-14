@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:eden/pages/signupScreen.dart';
 import 'package:eden/pages/loginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -37,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: OutlineButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUpScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginScreen()));
           },
         ),
       )

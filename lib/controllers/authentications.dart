@@ -23,6 +23,30 @@ showErrorDialog(BuildContext context, String err) {
   );
 }
 
+Future<User> signIn(String email, String password, BuildContext context) async {
+  try {
+    UserCredential result = await auth.signInWithEmailAndPassword(email: email, password: password);
+    User user = result.user;
+    return Future.value(user);
+  } on FirebaseAuthException catch(error) {
+    switch(error.code) {
+      case 'invalid-email':
+        showErrorDialog(context, "Invalid email address");
+        break;
+      case 'wrong-password':
+        showErrorDialog(context, "Invalid password");
+        break;
+      case 'user-not-found':
+        showErrorDialog(context, "User not found");
+        break;
+      case 'user-disabled':
+        showErrorDialog(context, "User disabled");
+        break;
+    }
+    return Future.value(null);
+  }
+}
+
 Future<User> signUp(String email, String password, BuildContext context) async {
   try {
     UserCredential result = await auth.createUserWithEmailAndPassword(email: email, password: password);
