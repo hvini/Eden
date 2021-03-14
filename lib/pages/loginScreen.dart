@@ -1,6 +1,7 @@
 import 'package:eden/pages/feedScreen.dart';
 import 'package:eden/pages/signupScreen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:eden/controllers/authentications.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -80,27 +81,46 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                         ),
-                        RaisedButton(
-                          onPressed: login,
-                          color: Colors.green,
-                          textColor: Colors.white,
-                          child: Text(
-                            "Login",
-                          ),
+                        Padding(
+                          padding: EdgeInsets.all(15),
+                          child: Column(children: [
+                            ElevatedButton(
+                              child: Text(
+                                "Login".toUpperCase(),
+                                style: TextStyle(fontSize: 18, color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.lightGreen,
+                                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)
+                                ),
+                              ),
+                              onPressed: login,
+                            ),
+                          ]),
                         ),
                       ],
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SignUpScreen()));
-                  },
-                  child: Text(
-                    "Don't have an account? Sign Up",
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                    children: <TextSpan>[
+                      TextSpan(text: "Don't have an account? "),
+                      TextSpan(
+                        text: 'Sign Up',
+                        style: TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => SignUpScreen()));
+                          }
+                      ),
+                    ],
                   ),
-                )
+                ),
               ],
             ),
           ),

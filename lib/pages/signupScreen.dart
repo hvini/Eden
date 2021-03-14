@@ -1,4 +1,5 @@
 import 'package:eden/pages/feedScreen.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:eden/controllers/authentications.dart';
@@ -36,7 +37,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              FlutterLogo(),
+              FlutterLogo(
+                size: 50.0,
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.0),
                 child: Text(
@@ -87,25 +90,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                         ),
                       ),
-                      RaisedButton(
-                        onPressed: handleSignup,
-                        color: Colors.green,
-                        textColor: Colors.white,
-                        child: Text(
-                          "Sign up",
-                        ),
+                      Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Column(children: [
+                          ElevatedButton(
+                            child: Text(
+                              "Sign Up".toUpperCase(),
+                              style: TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.lightGreen,
+                              padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)
+                              ),
+                            ),
+                            onPressed: handleSignup,
+                          ),
+                        ]),
                       ),
                     ],
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
-                },
-                child: Text(
-                  "Have an account? Login"
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                  children: <TextSpan>[
+                    TextSpan(text: "Have an account? "),
+                    TextSpan(
+                        text: 'Login',
+                        style: TextStyle(color: Colors.blue),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => LoginScreen()));
+                          }
+                    ),
+                  ],
                 ),
               ),
             ],
