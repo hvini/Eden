@@ -1,24 +1,12 @@
+import 'package:eden/app/app_module.dart';
 import 'package:flutter/material.dart';
-import 'package:eden/pages/loginScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(ModularApp(module: AppModule()));
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.green,
-        primarySwatch: Colors.lightGreen,
-        accentColor: Colors.lightGreenAccent
-      ),
-      home: LoginScreen(),
-    );
-  }
-}
+

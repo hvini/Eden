@@ -1,35 +1,16 @@
-import 'package:eden/pages/feedScreen.dart';
+import 'package:eden/app/modules/login/presentation/pages/sign-up/sign_up_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:eden/controllers/authentications.dart';
-import 'package:eden/pages/loginScreen.dart';
+import 'sign_up_controller.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  String email;
-  String password;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  void handleSignup() {
-    if(formKey.currentState.validate()) {
-      formKey.currentState.save();
-      signUp(email.trim(), password, context).then((value) {
-        if(value != null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FeedScreen(uid: value.uid)
-          ));
-        }
-      });
-    }
-  }
-
+class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +36,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     .size
                     .width * 0.90,
                 child: Form(
-                  key: formKey,
                   child: Column(
                     children: <Widget>[
                       TextFormField(
@@ -69,7 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                         },
                         onChanged: (val) {
-                          email = val;
+                          controller.setEmail(val);
                         },
                       ),
                       Padding(
@@ -86,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 6, errorText: "Minimum 6 characters required")
                           ]),
                           onChanged: (val) {
-                            password = val;
+                            controller.setPassword(val);
                           },
                         ),
                       ),
@@ -105,7 +85,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   borderRadius: BorderRadius.circular(20.0)
                               ),
                             ),
-                            onPressed: handleSignup,
+                            onPressed: controller.signUp,
                           ),
                         ]),
                       ),
@@ -119,13 +99,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: <TextSpan>[
                     TextSpan(text: "Have an account? "),
                     TextSpan(
-                        text: 'Login',
-                        style: TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => LoginScreen()));
-                          }
+                      text: 'Login',
+                      style: TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Modular.to.pushNamed("/login");
+                      }
                     ),
                   ],
                 ),
