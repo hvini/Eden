@@ -13,7 +13,7 @@ class SignInImpl implements SignIn {
   SignInImpl(this.userRepository);
 
   @override
-  Future<Either<Exception, User>> call(UserEntity credential) {
+  Future<Either<Exception, User>> call(UserEntity credential) async {
     return userRepository.signIn(credential);
   }
 }
