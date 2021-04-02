@@ -1,4 +1,5 @@
 import 'package:eden/app/modules/login/presentation/pages/sign-in/sign_in_controller.dart';
+import 'package:eden/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,7 @@ class _SignInPageState extends ModularState<SignInPage, SignInController> {
                       children: <Widget>[
                         TextFormField(
                           decoration: InputDecoration(border: OutlineInputBorder(), labelText: "Email"),
+                          cursorColor: primaryColor,
                           validator: MultiValidator([
                             RequiredValidator(errorText: "This field is required"),
                             EmailValidator(errorText: "Invalid email address"),
@@ -51,6 +53,7 @@ class _SignInPageState extends ModularState<SignInPage, SignInController> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: "Password"),
+                            cursorColor: primaryColor,
                             validator: MultiValidator([
                               RequiredValidator(errorText: "Password is required"),
                               MinLengthValidator(6, errorText: "Minimum 6 character required"),
@@ -69,7 +72,7 @@ class _SignInPageState extends ModularState<SignInPage, SignInController> {
                                 style: TextStyle(fontSize: 18, color: Colors.white),
                               ),
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.lightGreen,
+                                primary: primaryColor,
                                 padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0)
@@ -85,12 +88,12 @@ class _SignInPageState extends ModularState<SignInPage, SignInController> {
                 ),
                 RichText(
                   text: TextSpan(
-                    style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                    style: TextStyle(color: textColor, fontSize: 20.0),
                     children: <TextSpan>[
                       TextSpan(text: "Don't have an account? "),
                       TextSpan(
                         text: 'Sign Up',
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: primaryColor),
                         recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Modular.to.pushNamed("/login/sign-up");

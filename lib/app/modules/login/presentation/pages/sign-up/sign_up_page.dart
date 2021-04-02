@@ -1,4 +1,5 @@
 import 'package:eden/app/modules/login/presentation/pages/sign-up/sign_up_controller.dart';
+import 'package:eden/constants.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -41,6 +42,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                       TextFormField(
                         decoration: InputDecoration(
                             border: OutlineInputBorder(), labelText: "Email"),
+                        cursorColor: primaryColor,
                         validator: (_val) {
                           if (_val.isEmpty) {
                             return "Can't be empty";
@@ -59,6 +61,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: "Password"),
+                          cursorColor: primaryColor,
                           validator: MultiValidator([
                             RequiredValidator(
                                 errorText: "This field is required"),
@@ -79,7 +82,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                               style: TextStyle(fontSize: 18, color: Colors.white),
                             ),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.lightGreen,
+                              primary: primaryColor,
                               padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20.0)
@@ -95,12 +98,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
               ),
               RichText(
                 text: TextSpan(
-                  style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                  style: TextStyle(color: textColor, fontSize: 20.0),
                   children: <TextSpan>[
                     TextSpan(text: "Have an account? "),
                     TextSpan(
                       text: 'Login',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: primaryColor),
                       recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Modular.to.pushNamed("/login");

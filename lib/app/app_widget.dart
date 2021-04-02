@@ -1,3 +1,4 @@
+import 'package:eden/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:asuka/asuka.dart' as asuka show builder;
@@ -10,9 +11,8 @@ class AppWidget extends StatelessWidget {
       navigatorKey: Modular.navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.green,
-          primarySwatch: Colors.lightGreen,
-          accentColor: Colors.lightGreenAccent
+        primaryColor: primaryColor,
+        backgroundColor: backgroundColor
       ),
       initialRoute: '/login',
       builder: asuka.builder,
