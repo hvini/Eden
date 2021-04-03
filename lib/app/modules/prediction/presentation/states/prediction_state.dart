@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 abstract class PredictionState {}
 
 class StartState implements PredictionState {

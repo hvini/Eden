@@ -13,17 +13,6 @@ class PredictionRepositoryImpl implements PredictionRepository {
   }
 
   @override
-  Future<Either<Exception, PickedFile>> galleryPick() async {
-    try {
-      PickedFile image = await ImagePicker().getImage(source: ImageSource.gallery);
-      if(image == null) return Left(null);
-      return Right(image);
-    } on Exception catch(ex) {
-      return Left(ex);
-    }
-  }
-
-  @override
   Future<Either<Exception, List<dynamic>>> prediction(PickedFile image) async {
     try {
       List<dynamic> output = await Tflite.runModelOnImage(

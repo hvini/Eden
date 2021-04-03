@@ -5,20 +5,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PredictionPage extends StatefulWidget {
   final String uid;
+  final PickedFile image;
   
-  PredictionPage({Key key, @required this.uid}) : super(key: key);
+  PredictionPage({Key key, @required this.uid, @required this.image}) : super(key: key);
   
   @override
-  _PredictionPageState createState() => _PredictionPageState(uid);
+  _PredictionPageState createState() => _PredictionPageState(uid, image);
 }
 
 class _PredictionPageState extends ModularState<PredictionPage, PredictionController> {
   final String uid;
+  PickedFile image;
   
-  _PredictionPageState(this.uid);
+  _PredictionPageState(this.uid, this.image);
 
   Widget _buildPreview(List<dynamic> output) {
     return Center(
@@ -26,10 +29,10 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          controller.image == null ? Container() : Image.file(File(controller.image.path)),
+          image == null ? Container() : Image.file(File(image.path)),
           SizedBox(height: 16,),
           output[0]['label'] == null ? Text("") : Text(
-              "${output[0]["label"]}"
+            "${output[0]["label"]}"
           ),
         ],
       )
@@ -45,9 +48,8 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
             child: Observer(builder: (_) {
               var state = controller.state;
               if(state is StartState) {
-                controller.loadModelUseCase();
                 return FutureBuilder(
-                  future: controller.prediction(),
+                  future: controller.prediction(image),
                   builder: (ctx, snapshot) {
                     if(snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -55,7 +57,7 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
                       );
                     }
                     return controller.setState(SuccessState(snapshot.data()));
-                  }
+                  },
                 );
               } else if(state is SuccessState) {
                 return _buildPreview(state.list);

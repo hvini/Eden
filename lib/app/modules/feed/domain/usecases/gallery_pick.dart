@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:eden/app/modules/prediction/domain/repositories/prediction_repository.dart';
+import 'package:eden/app/modules/feed/domain/repositories/feed_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
 abstract class GalleryPick {
@@ -7,12 +7,12 @@ abstract class GalleryPick {
 }
 
 class GalleryPickImpl implements GalleryPick {
-  final PredictionRepository predictionRepository;
+  final FeedRepository feedRepository;
 
-  GalleryPickImpl(this.predictionRepository);
+  GalleryPickImpl(this.feedRepository);
 
   @override
   Future<Either<Exception, PickedFile>> call() async {
-    return predictionRepository.galleryPick();
+    return feedRepository.galleryPick();
   }
 }

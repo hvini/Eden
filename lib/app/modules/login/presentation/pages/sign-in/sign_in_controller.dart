@@ -35,7 +35,7 @@ abstract class _SignInController with Store {
     result.fold((failure) {
       asuka.showSnackBar(SnackBar(content: Text(failure.toString())));
     }, (user) {
-      Modular.to.pushNamed('/feed/' + user.uid);
+      Modular.to.pushNamed('/feed/', arguments: {"uid": user.uid});
     });
   }
 }

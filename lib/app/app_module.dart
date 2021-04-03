@@ -9,7 +9,8 @@ class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
     ...LoginModule().export,
-    ...PredictionModule().export
+    ...PredictionModule().export,
+    ...FeedModule().export
   ];
 
   @override
