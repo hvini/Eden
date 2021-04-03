@@ -1,3 +1,5 @@
+import 'package:camera/camera.dart';
+import 'package:eden/app/modules/feed/presentation/pages/camera_pick/camera_pick_page.dart';
 import 'package:eden/app/modules/feed/presentation/pages/feed/feed_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,37 +21,42 @@ class _FeedPageState extends ModularState<FeedPage, FeedController> {
 
   Future<void> _showSelectionDialog(BuildContext context) {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("From where do you want to take the photo?"),
-            content: SingleChildScrollView(
-              child: ListBody(
-                  children: <Widget>[
-                    GestureDetector(
-                      child: Text("Gallery"),
-                      onTap: () {
-                        return FutureBuilder(
-                          future: controller.galleryPick(context),
-                          builder: (ctx, snapshot) {
-                            if(snapshot.connectionState == ConnectionState.done) { }
-                            return Container();
-                          },
-                        );
-                      },
-                    ),
-                    Padding(padding: EdgeInsets.all(8.0)),
-                    GestureDetector(
-                      child: Text("Camera"),
-                      onTap: () {
-                        return Container();
-                      },
-                    ),
-                  ]
-              ),
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("From where do you want to take the photo?"),
+          content: SingleChildScrollView(
+            child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text("Gallery"),
+                    onTap: () {
+                      return FutureBuilder(
+                        future: controller.galleryPick(context),
+                        builder: (ctx, snapshot) {
+                          if(snapshot.connectionState == ConnectionState.done) { }
+                          return Container();
+                        },
+                      );
+                    },
+                  ),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: Text("Camera"),
+                    onTap: () async {
+                      final cameras = await availableCameras();
+                      final camera = cameras.first;
+                      var result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CameraPickPage(camera: camera)),
+                      );
+                    },
+                  ),
+                ]
             ),
-          );
-        }
+          ),
+        );
+      }
     );
   }
 
@@ -61,7 +68,8 @@ class _FeedPageState extends ModularState<FeedPage, FeedController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _showSelectionDialog(context).whenComplete(() => Modular.to.pushNamed('/prediction', arguments: {"uid": uid, "image": controller.image}));
+          _showSelectionDialog(context);
+          //_showSelectionDialog(context).whenComplete(() => Modular.to.pushNamed('/prediction', arguments: {"uid": uid, "image": controller.image}));
         },
         child: Icon(
           Icons.camera_alt

@@ -43,5 +43,9 @@
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to the photo library.</string>
+	<key>NSCameraUsageDescription</key>
+    <string>This app requires to access your camera to capture your photo</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app requires to access mic to record your voice</string>
 </dict>
 </plist>
