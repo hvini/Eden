@@ -14,28 +14,50 @@ class PredictionPage extends StatefulWidget {
   PredictionPage({Key key, @required this.uid, @required this.image}) : super(key: key);
   
   @override
-  _PredictionPageState createState() => _PredictionPageState(uid, image);
+  _PredictionPageState createState() => _PredictionPageState(uid);
 }
 
 class _PredictionPageState extends ModularState<PredictionPage, PredictionController> {
   final String uid;
-  PickedFile image;
   
-  _PredictionPageState(this.uid, this.image);
+  _PredictionPageState(this.uid);
 
   Widget _buildPreview(List<dynamic> output) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          image == null ? Container() : Image.file(File(image.path)),
-          SizedBox(height: 16,),
-          output[0]['label'] == null ? Text("") : Text(
-            "${output[0]["label"]}"
-          ),
-        ],
-      )
+    return Scaffold(
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Expanded(
+                flex: 2,
+                child: Image.file(File(widget.image.path), fit: BoxFit.cover)
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: double.infinity,
+                height: 240,
+                color: Colors.black,
+                child: Center(
+                  child: Text(
+                    "${output[0]["label"]}",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15.0
+                    ),
+                  ),
+                  /*child: IconButton(
+                    icon: Icon(Icons.share, color: Colors.white),
+                    onPressed: () {
+                      return Container();
+                    },
+                  ),*/
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -49,7 +71,7 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
               var state = controller.state;
               if(state is StartState) {
                 return FutureBuilder(
-                  future: controller.prediction(image),
+                  future: controller.prediction(widget.image),
                   builder: (ctx, snapshot) {
                     if(snapshot.connectionState == ConnectionState.waiting) {
                       return Center(

@@ -22,10 +22,10 @@ abstract class _FeedController with Store {
       asuka.showSnackBar(SnackBar(content: Text(failure.toString())));
       return Left(failure);
     }, (PickedFile image) {
-      Navigator.of(context).pop();
       setImage(image);
       return Right(image);
     });
+    return null;
   }
 
   @observable
