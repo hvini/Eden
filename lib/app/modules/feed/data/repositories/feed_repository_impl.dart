@@ -4,9 +4,9 @@ import 'package:image_picker/image_picker.dart';
 
 class FeedRepositoryImpl implements FeedRepository {
   @override
-  Future<Either<Exception, PickedFile>> galleryPick() async {
+  Future<Either<Exception, PickedFile>> imagePick(ImageSource source) async {
     try {
-      PickedFile image = await ImagePicker().getImage(source: ImageSource.gallery);
+      PickedFile image = await ImagePicker().getImage(source: source);
       if(image == null) return Left(null);
       return Right(image);
     } on Exception catch(ex) {

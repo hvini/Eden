@@ -7,7 +7,7 @@ part of 'feed_controller.dart';
 // **************************************************************************
 
 final $FeedController = BindInject(
-        (i) => FeedController(i<GalleryPick>()),
+        (i) => FeedController(i<ImagePick>()),
     singleton: true,
     lazy: true
 );
@@ -51,7 +51,7 @@ mixin _$FeedController on _FeedController, Store {
   @override
   String toString() {
     return '''
-image: ${image}
+
     ''';
   }
 }
