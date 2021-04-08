@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'package:eden/app/modules/prediction/presentation/pages/prediction/prediction_controller.dart';
+import 'package:eden/app/modules/prediction/presentation/pages/preview/preview_page.dart';
 import 'package:eden/app/modules/prediction/presentation/states/prediction_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,47 +19,8 @@ class PredictionPage extends StatefulWidget {
 
 class _PredictionPageState extends ModularState<PredictionPage, PredictionController> {
   final String uid;
-  
-  _PredictionPageState(this.uid);
 
-  Widget _buildPreview(List<dynamic> output) {
-    return Scaffold(
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-                flex: 2,
-                child: Image.file(File(widget.image.path), fit: BoxFit.cover)
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: double.infinity,
-                height: 240,
-                color: Colors.black,
-                child: Center(
-                  child: Text(
-                    "${output[0]["label"]}",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15.0
-                    ),
-                  ),
-                  /*child: IconButton(
-                    icon: Icon(Icons.share, color: Colors.white),
-                    onPressed: () {
-                      return Container();
-                    },
-                  ),*/
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  _PredictionPageState(this.uid);
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +43,7 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
                   },
                 );
               } else if(state is SuccessState) {
-                return _buildPreview(state.list);
+                return PreviewPage(output: state.list, image: widget.image);
               } else {
                 return Container();
               }
