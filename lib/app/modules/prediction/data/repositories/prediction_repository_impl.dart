@@ -1,9 +1,18 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:eden/app/modules/prediction/data/datasource/firebase_datasource.dart';
+import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.dart';
 import 'package:eden/app/modules/prediction/domain/repositories/prediction_repository.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
 class PredictionRepositoryImpl implements PredictionRepository {
+  final FirebaseDataSource firebaseDataSource;
+
+  PredictionRepositoryImpl(this.firebaseDataSource);
+
   @override
   void loadModel() async {
     await Tflite.loadModel(
@@ -27,4 +36,15 @@ class PredictionRepositoryImpl implements PredictionRepository {
       return Left(ex);
     }
   }
+
+  @override
+  Stream<List<PredictionEntity>> getAllPredictions() => firebaseDataSource.getAllPredictions();
+
+  @override
+  Future<DocumentReference> savePrediction(PredictionEntity prediction) async =>
+    await firebaseDataSource.savePrediction(prediction);
+
+  @override
+  Future<String> uploadFile(File file, String folder, String name, String extension) async =>
+    await firebaseDataSource.uploadFile(file, folder, name, extension);
 }

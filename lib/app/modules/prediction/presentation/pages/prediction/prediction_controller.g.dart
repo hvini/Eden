@@ -7,7 +7,7 @@ part of 'prediction_controller.dart';
 // **************************************************************************
 
 final $PredictionController = BindInject(
-        (i) => PredictionController(i<LoadModel>(), i<Prediction>()),
+        (i) => PredictionController(i<LoadModel>(), i<Prediction>(), i<UploadFile>(), i<SavePrediction>()),
     singleton: true,
     lazy: true
 );

@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.dart';
+import 'package:eden/app/modules/prediction/domain/usecases/save_prediction.dart';
+import 'package:eden/app/modules/prediction/domain/usecases/upload_file.dart';
 import 'package:eden/app/modules/prediction/presentation/pages/prediction/prediction_controller.dart';
 import 'package:eden/app/modules/prediction/presentation/pages/preview/preview_page.dart';
 import 'package:eden/app/modules/prediction/presentation/states/prediction_state.dart';
@@ -19,6 +24,9 @@ class PredictionPage extends StatefulWidget {
 
 class _PredictionPageState extends ModularState<PredictionPage, PredictionController> {
   final String uid;
+  SavePrediction savePredictionUseCase;
+  UploadFile uploadFileUseCase;
+  PredictionEntity newPrediction = new PredictionEntity();
 
   _PredictionPageState(this.uid);
 
@@ -43,7 +51,37 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
                   },
                 );
               } else if(state is SuccessState) {
-                return PreviewPage(output: state.list, image: widget.image);
+                File file = File(widget.image.path);
+                String id = UniqueKey().toString();
+                return FutureBuilder(
+                  future: controller.uploadFileUseCase(file, "predictionFiles", id, ""),
+                  builder: (ctx, snapshot) {
+                    if(!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      newPrediction = PredictionEntity(
+                        imageUrl: snapshot.data.toString(),
+                        predicted: state.list[0]['label'],
+                        confidence: state.list[0]['confidence']
+                      );
+                      return FutureBuilder(
+                        future: controller.savePrediction(newPrediction),
+                        builder: (ctx, snapshot) {
+                          if(!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            print(snapshot.data.id);
+                            return PreviewPage(output: state.list, image: widget.image);
+                          }
+                        },
+                      );
+                    }
+                  },
+                );
               } else {
                 return Container();
               }
