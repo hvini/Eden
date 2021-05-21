@@ -47,4 +47,8 @@ class PredictionRepositoryImpl implements PredictionRepository {
   @override
   Future<String> uploadFile(File file, String folder, String name, String extension) async =>
     await firebaseDataSource.uploadFile(file, folder, name, extension);
+
+  @override
+  Future<DocumentSnapshot> getPredictionById(String uid) async =>
+    await firebaseDataSource.getPredictionById(uid);
 }

@@ -11,4 +11,5 @@ abstract class PredictionRepository {
   Future<DocumentReference> savePrediction(PredictionEntity prediction);
   Stream<List<PredictionEntity>> getAllPredictions();
   Future<String> uploadFile(File file, String folder, String name, String extension);
+  Future<DocumentSnapshot> getPredictionById(String uid);
 }

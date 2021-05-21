@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:eden/app/modules/prediction/data/models/prediction_model.dart';
 import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.dart';
+import 'package:eden/app/modules/prediction/domain/usecases/get_prediction_by_id.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/load_model.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/prediction.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/save_prediction.dart';
@@ -24,8 +26,9 @@ abstract class _PredictionController with Store {
   final Prediction predictionUseCase;
   final UploadFile uploadFileUseCase;
   final SavePrediction savePredictionUseCase;
+  final GetPredictionById getPredictionByIdUseCase;
 
-  _PredictionController(this.loadModelUseCase, this.predictionUseCase, this.uploadFileUseCase, this.savePredictionUseCase);
+  _PredictionController(this.loadModelUseCase, this.predictionUseCase, this.uploadFileUseCase, this.savePredictionUseCase, this.getPredictionByIdUseCase);
 
   Future<PredictionState> prediction(PickedFile image) async {
     loadModelUseCase();
@@ -44,6 +47,10 @@ abstract class _PredictionController with Store {
 
   Future<DocumentReference> savePrediction(PredictionEntity prediction) async {
     return await savePredictionUseCase(prediction);
+  }
+
+  Future<DocumentSnapshot> getPredictionById(String uid) async {
+    return await getPredictionByIdUseCase(uid);
   }
 
   @observable

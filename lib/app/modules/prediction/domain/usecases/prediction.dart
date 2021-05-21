@@ -13,6 +13,6 @@ class PredictionImpl implements Prediction {
 
   @override
   Future<Either<Exception, List<dynamic>>> call(PickedFile image) async {
-    return predictionRepository.prediction(image);
+    return await predictionRepository.prediction(image);
   }
 }

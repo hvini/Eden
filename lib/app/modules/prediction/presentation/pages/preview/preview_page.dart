@@ -1,22 +1,50 @@
-import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eden/app/modules/prediction/presentation/pages/prediction/prediction_controller.dart';
+import 'package:eden/app/modules/prediction/ui/components/bottom_sheet_widget.dart';
 import 'package:eden/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class PreviewPage extends StatefulWidget {
-  final List<dynamic> output;
-  final PickedFile image;
+  final DocumentSnapshot snapshot;
 
-  PreviewPage({@required this.output, @required this.image});
+  PreviewPage({@required this.snapshot});
 
   @override
   _PreviewPageState createState() => _PreviewPageState();
 }
 
-class _PreviewPageState extends State<PreviewPage> {
+class _PreviewPageState extends ModularState<PreviewPage, PredictionController> {
   bool liked = false;
   bool disliked = false;
+  bool btnDisabled = false;
+  bool showResults = true;
+
+  void _like() {
+    if(!btnDisabled) {
+      setState(() {
+        btnDisabled = true;
+        liked = true;
+      });
+    }
+  }
+
+  _dislike(context) {
+    if(!btnDisabled) {
+      setState(() {
+        btnDisabled = true;
+        disliked = true;
+        showResults = false;
+      });
+      var sheetController = showBottomSheet(context: context, builder: (context) => BottomSheetWidget());
+      sheetController.closed.then((value) {
+        setState(() {
+          showResults = true;
+        });
+      });
+    }
+  }
 
   Future<bool> _onWillPop() async {
     Navigator.of(context).pop(true);
@@ -28,10 +56,10 @@ class _PreviewPageState extends State<PreviewPage> {
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       leading: new IconButton(
-        icon: new Icon(Icons.close),
-        iconSize: 30,
-        color: Colors.black,
-        onPressed: () => Navigator.of(context).pop()
+          icon: new Icon(Icons.close),
+          iconSize: 30,
+          color: Colors.black,
+          onPressed: () => Navigator.of(context).pop()
       ),
     );
   }
@@ -39,18 +67,18 @@ class _PreviewPageState extends State<PreviewPage> {
   Widget _imageSection(String imagePath) {
     return Expanded(
         flex: 2,
-        child: Image.file(File(imagePath), fit: BoxFit.cover)
+        child: Image.network(imagePath, fit: BoxFit.cover)
     );
   }
 
-  Widget _resultTexts(List<dynamic> output) {
-    num confidence = output[0]['confidence'] * 100;
+  Widget _resultTexts(DocumentSnapshot documentSnapshot) {
+    num confidence = documentSnapshot['confidence'] * 100;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          "${output[0]['label']}",
+          "${documentSnapshot['predicted']}",
           style: TextStyle(
               fontSize: 18,
               color: Colors.black,
@@ -70,7 +98,7 @@ class _PreviewPageState extends State<PreviewPage> {
     );
   }
 
-  Widget _feedBackButtons() {
+  Widget _feedBackButtons(context) {
     return Row(
       children: <Widget>[
         IconButton(
@@ -78,21 +106,21 @@ class _PreviewPageState extends State<PreviewPage> {
               liked ? Icons.thumb_up : Icons.thumb_up_outlined,
               color: liked ? Colors.green : Colors.green
           ),
-          onPressed: () => setState(() { liked = !liked; }),
+          onPressed: () => btnDisabled ? null : _like(),
         ),
         IconButton(
           icon: Icon(
               disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
               color: disliked ? Colors.red : Colors.red
           ),
-          onPressed: () => setState(() { disliked = !disliked; }),
+          onPressed: () => btnDisabled ? null : _dislike(context),
         ),
       ],
     );
   }
 
-  Widget _resultSection(List<dynamic> output) {
-    return Column(
+  Widget _resultSection(DocumentSnapshot documentSnapshot, context) {
+    return showResults ? Column(
       children: <Widget>[
         Center(
           child: Container(
@@ -100,7 +128,8 @@ class _PreviewPageState extends State<PreviewPage> {
             child: Container(
               alignment: Alignment.topLeft,
               color: primaryColor,
-              margin: new EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+              margin: new EdgeInsets.symmetric(
+                  vertical: 15.0, horizontal: 30.0),
               child: Text(
                 "Plant predicted",
                 style: TextStyle(
@@ -120,19 +149,20 @@ class _PreviewPageState extends State<PreviewPage> {
               padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
               color: Colors.white,
               height: 80.0,
-              margin: new EdgeInsets.symmetric(vertical: 40.0, horizontal: 30.0),
+              margin: new EdgeInsets.symmetric(
+                  vertical: 40.0, horizontal: 30.0),
               child: Row(
                 children: <Widget>[
-                  _resultTexts(output),
+                  _resultTexts(documentSnapshot),
                   SizedBox(width: 70.0),
-                  _feedBackButtons(),
+                  _feedBackButtons(context),
                 ],
               ),
             ),
           ),
         ),
       ],
-    );
+    ): Container();
   }
 
   @override
@@ -149,8 +179,8 @@ class _PreviewPageState extends State<PreviewPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _imageSection(widget.image.path),
-                _resultSection(widget.output),
+                _imageSection(widget.snapshot['imageUrl']),
+                _resultSection(widget.snapshot, context),
               ],
             ),
           ),

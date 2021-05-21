@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/save_prediction.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/upload_file.dart';
@@ -74,8 +73,18 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
                               child: CircularProgressIndicator(),
                             );
                           } else {
-                            print(snapshot.data.id);
-                            return PreviewPage(output: state.list, image: widget.image);
+                            return FutureBuilder(
+                              future: controller.getPredictionById(snapshot.data.id),
+                              builder: (ctx, snapshot) {
+                                if(!snapshot.hasData) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                } else {
+                                  return PreviewPage(snapshot: snapshot.data);
+                                }
+                              },
+                            );
                           }
                         },
                       );

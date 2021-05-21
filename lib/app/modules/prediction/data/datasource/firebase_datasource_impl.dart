@@ -55,4 +55,9 @@ class FirebaseDataSourceImpl implements FirebaseDataSource {
       return downloadUrl;
     }
   }
+
+  @override
+  Future<DocumentSnapshot> getPredictionById(String uid) async {
+    return await firestoreInstance.collection("predictions").doc(uid).get();
+  }
 }

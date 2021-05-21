@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:eden/app/modules/prediction/domain/repositories/prediction_repository.dart';
 
 abstract class UploadFile {

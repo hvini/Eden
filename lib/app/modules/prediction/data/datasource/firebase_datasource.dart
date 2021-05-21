@@ -7,4 +7,5 @@ abstract class FirebaseDataSource {
   Stream<List<PredictionEntity>> getAllPredictions();
   Future<DocumentReference> savePrediction(PredictionEntity prediction);
   Future<String> uploadFile(File file, String folder, String name, String extension);
+  Future<DocumentSnapshot> getPredictionById(String uid);
 }
