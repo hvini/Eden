@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eden/app/modules/prediction/data/models/prediction_model.dart';
 import 'package:eden/app/modules/prediction/presentation/pages/prediction/prediction_controller.dart';
-import 'package:eden/app/modules/prediction/ui/components/bottom_sheet_widget.dart';
+import 'package:eden/app/modules/prediction/presentation/components/bottom_sheet_widget.dart';
 import 'package:eden/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class PreviewPage extends StatefulWidget {
+  final String uid;
   final DocumentSnapshot snapshot;
 
-  PreviewPage({@required this.snapshot});
+  PreviewPage({@required this.uid, @required this.snapshot});
 
   @override
   _PreviewPageState createState() => _PreviewPageState();
@@ -20,45 +22,60 @@ class _PreviewPageState extends ModularState<PreviewPage, PredictionController> 
   bool disliked = false;
   bool btnDisabled = false;
   bool showResults = true;
+  String _details;
+  Map<String, dynamic> _document;
 
   void _like() {
-    if(!btnDisabled) {
-      setState(() {
-        btnDisabled = true;
-        liked = true;
-      });
-    }
+    setState(() {
+      btnDisabled = true;
+      liked = true;
+    });
   }
 
   _dislike(context) {
-    if(!btnDisabled) {
+    setState(() {
+      btnDisabled = true;
+      disliked = true;
+      showResults = false;
+    });
+
+    showModalBottomSheet(
+      isDismissible: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20))
+      ),
+      context: context,
+      builder: (context) => BottomSheetWidget()
+    ).then((value) => {
       setState(() {
-        btnDisabled = true;
-        disliked = true;
-        showResults = false;
-      });
-      var sheetController = showBottomSheet(context: context, builder: (context) => BottomSheetWidget());
-      sheetController.closed.then((value) {
-        setState(() {
-          showResults = true;
-        });
-      });
-    }
+        showResults = true;
+      }),
+
+      _document = new PredictionModel(
+        user: widget.snapshot['user'],
+        imageUrl: widget.snapshot['imageUrl'],
+        predicted: widget.snapshot['predicted'],
+        confidence: widget.snapshot['confidence'],
+        isCorrect: false,
+        details: value,
+        isHidden: widget.snapshot['isHidden']
+      ).toDocument(),
+      controller.updatePredictionUseCase(widget.snapshot.id, _document)
+    });
   }
 
   Future<bool> _onWillPop() async {
-    Navigator.of(context).pop(true);
+    Modular.to.pushNamed('/feed/', arguments: {"uid": widget.uid});
     return true;
   }
 
   Widget _appBar() {
     return new AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0.0,
+      backgroundColor: primaryColor,
       leading: new IconButton(
           icon: new Icon(Icons.close),
           iconSize: 30,
-          color: Colors.black,
+          color: Colors.white,
           onPressed: () => Navigator.of(context).pop()
       ),
     );
@@ -129,7 +146,7 @@ class _PreviewPageState extends ModularState<PreviewPage, PredictionController> 
               alignment: Alignment.topLeft,
               color: primaryColor,
               margin: new EdgeInsets.symmetric(
-                  vertical: 15.0, horizontal: 30.0),
+                vertical: 15.0, horizontal: 30.0),
               child: Text(
                 "Plant predicted",
                 style: TextStyle(
@@ -150,7 +167,7 @@ class _PreviewPageState extends ModularState<PreviewPage, PredictionController> 
               color: Colors.white,
               height: 80.0,
               margin: new EdgeInsets.symmetric(
-                  vertical: 40.0, horizontal: 30.0),
+                vertical: 40.0, horizontal: 30.0),
               child: Row(
                 children: <Widget>[
                   _resultTexts(documentSnapshot),
@@ -162,7 +179,7 @@ class _PreviewPageState extends ModularState<PreviewPage, PredictionController> 
           ),
         ),
       ],
-    ): Container();
+    ) : Container(color: primaryColor);
   }
 
   @override
@@ -174,7 +191,6 @@ class _PreviewPageState extends ModularState<PreviewPage, PredictionController> 
         onWillPop: _onWillPop,
         child: Scaffold(
           appBar: _appBar(),
-          extendBodyBehindAppBar: true,
           body: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

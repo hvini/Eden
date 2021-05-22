@@ -51,4 +51,8 @@ class PredictionRepositoryImpl implements PredictionRepository {
   @override
   Future<DocumentSnapshot> getPredictionById(String uid) async =>
     await firebaseDataSource.getPredictionById(uid);
+
+  @override
+  Future<void> updatePrediction(String predictionId, Map<String, dynamic> document) async =>
+      await firebaseDataSource.updatePrediction(predictionId, document);
 }

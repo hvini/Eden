@@ -5,6 +5,7 @@ import 'package:eden/app/modules/prediction/domain/usecases/get_prediction_by_id
 import 'package:eden/app/modules/prediction/domain/usecases/load_model.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/prediction.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/save_prediction.dart';
+import 'package:eden/app/modules/prediction/domain/usecases/update_prediction.dart';
 import 'package:eden/app/modules/prediction/domain/usecases/upload_file.dart';
 import 'package:eden/app/modules/prediction/presentation/pages/prediction/prediction_controller.dart';
 import 'package:eden/app/modules/prediction/presentation/pages/prediction/prediction_page.dart';
@@ -21,7 +22,8 @@ class PredictionModule extends ChildModule {
     Bind((i) => FirebaseDataSourceImpl()),
     Bind((i) => UploadFileImpl(i())),
     Bind((i) => PredictionRepositoryImpl(i())),
-    Bind((i) => GetPredictionByIdImpl(i()))
+    Bind((i) => GetPredictionByIdImpl(i())),
+    Bind((i) => UpdatePredictionImpl(i()))
   ];
 
   List<Bind> export = [

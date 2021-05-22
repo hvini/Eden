@@ -9,7 +9,7 @@ import 'package:asuka/asuka.dart' as asuka;
 class FeedPage extends StatefulWidget {
   final String uid;
 
-  FeedPage({Key key, @required this.uid}) : super(key: key);
+  FeedPage({@required this.uid});
 
   @override
   _FeedPageState createState() => _FeedPageState();

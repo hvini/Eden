@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -59,5 +58,10 @@ class FirebaseDataSourceImpl implements FirebaseDataSource {
   @override
   Future<DocumentSnapshot> getPredictionById(String uid) async {
     return await firestoreInstance.collection("predictions").doc(uid).get();
+  }
+
+  @override
+  Future<void> updatePrediction(String predictionId, Map<String, dynamic> document) async {
+    await firestoreInstance.collection("predictions").doc(predictionId).set(document);
   }
 }

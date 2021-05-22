@@ -15,7 +15,7 @@ class PredictionPage extends StatefulWidget {
   final String uid;
   final PickedFile image;
   
-  PredictionPage({Key key, @required this.uid, @required this.image}) : super(key: key);
+  PredictionPage({@required this.uid, @required this.image});
   
   @override
   _PredictionPageState createState() => _PredictionPageState(uid);
@@ -81,7 +81,7 @@ class _PredictionPageState extends ModularState<PredictionPage, PredictionContro
                                     child: CircularProgressIndicator(),
                                   );
                                 } else {
-                                  return PreviewPage(snapshot: snapshot.data);
+                                  return PreviewPage(uid: widget.uid, snapshot: snapshot.data);
                                 }
                               },
                             );
