@@ -22,7 +22,6 @@ class _PreviewPageState extends ModularState<PreviewPage, PredictionController> 
   bool disliked = false;
   bool btnDisabled = false;
   bool showResults = true;
-  String _details;
   Map<String, dynamic> _document;
 
   void _like() {
@@ -73,10 +72,10 @@ class _PreviewPageState extends ModularState<PreviewPage, PredictionController> 
     return new AppBar(
       backgroundColor: primaryColor,
       leading: new IconButton(
-          icon: new Icon(Icons.close),
-          iconSize: 30,
-          color: Colors.white,
-          onPressed: () => Navigator.of(context).pop()
+        icon: new Icon(Icons.close),
+        iconSize: 30,
+        color: Colors.white,
+        onPressed: () => Navigator.of(context).pop()
       ),
     );
   }

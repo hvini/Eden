@@ -14,7 +14,14 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends ModularState<SignInPage, SignInController> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if(!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -106,6 +113,7 @@ class _SignInPageState extends ModularState<SignInPage, SignInController> {
             ),
           ),
         ),
+      ),
     );
   }
 }
