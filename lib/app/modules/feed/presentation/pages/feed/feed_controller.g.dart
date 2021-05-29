@@ -19,21 +19,6 @@ final $FeedController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FeedController on _FeedController, Store {
-  final _$uidAtom = Atom(name: '_FeedController.uid');
-
-  @override
-  String get uid {
-    _$uidAtom.reportRead();
-    return super.uid;
-  }
-
-  @override
-  set uid(String value) {
-    _$uidAtom.reportWrite(value, super.uid, () {
-      super.uid = value;
-    });
-  }
-
   final _$predictionListAtom = Atom(name: '_FeedController.predictionList');
 
   @override
@@ -53,17 +38,6 @@ mixin _$FeedController on _FeedController, Store {
       ActionController(name: '_FeedController');
 
   @override
-  dynamic setUid(String value) {
-    final _$actionInfo = _$_FeedControllerActionController.startAction(
-        name: '_FeedController.setUid');
-    try {
-      return super.setUid(value);
-    } finally {
-      _$_FeedControllerActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void getList(String uid) {
     final _$actionInfo = _$_FeedControllerActionController.startAction(
         name: '_FeedController.getList');
@@ -77,7 +51,6 @@ mixin _$FeedController on _FeedController, Store {
   @override
   String toString() {
     return '''
-uid: ${uid},
 predictionList: ${predictionList}
     ''';
   }

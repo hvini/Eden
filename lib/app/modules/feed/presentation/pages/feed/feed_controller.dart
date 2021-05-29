@@ -14,9 +14,7 @@ abstract class _FeedController with Store {
   final ImagePick imagePickUseCase;
   final GetUserPredictions getUserPredictionsUseCase;
 
-  _FeedController(this.imagePickUseCase, this.getUserPredictionsUseCase) {
-    getList(uid);
-  }
+  _FeedController(this.imagePickUseCase, this.getUserPredictionsUseCase);
 
   Future<PickedFile> imagePick(ImageSource source) async {
     try {
@@ -27,13 +25,7 @@ abstract class _FeedController with Store {
   }
 
   @observable
-  String uid;
-
-  @observable
   ObservableStream<List<PredictionEntity>> predictionList;
-
-  @action
-  setUid(String value) => uid = value;
 
   @action
   void getList(String uid) {

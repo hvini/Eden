@@ -23,7 +23,8 @@ class _FeedPageState extends ModularState<FeedPage, FeedController> {
   @override
   void initState() {
     super.initState();
-    controller.setUid(widget.uid);
+    source = null;
+    controller.getList(widget.uid);
   }
 
   Future<bool> _onWillPop() async {
@@ -81,25 +82,48 @@ class _FeedPageState extends ModularState<FeedPage, FeedController> {
     return new WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        backgroundColor: backgroundColor,
         appBar: _appBar(),
         body: Observer(builder: (_) {
-          if(controller.predictionList.data == null) {
+          if(controller.predictionList.hasError || controller.predictionList.data == null) {
             return Container();
-          } else if(controller.predictionList.hasError) {
-            return Center(
-              child: RaisedButton(
-                onPressed: () {controller.getList(widget.uid);},
-                child: Text('Error'),
-              ),
-            );
           } else {
             List<PredictionEntity> list = controller.predictionList.data;
             return ListView.builder(
               itemCount: list.length,
               itemBuilder: (_, index) {
                 var model = list[index];
-                return ListTile(
-                  title: Text(model.predicted),
+                return Card(
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Ink.image(
+                        image: NetworkImage(model.imageUrl),
+                        child: InkWell(
+                          onTap: () {},
+                        ),
+                        height: 220,
+                        fit: BoxFit.cover
+                      ),
+                      Positioned(
+                        bottom: 16,
+                        right: 16,
+                        left: 16,
+                        child: Text(
+                          model.predicted,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ),
+                    ]
+                  )
                 );
               }
             );
@@ -113,7 +137,14 @@ class _FeedPageState extends ModularState<FeedPage, FeedController> {
               try {
                 PickedFile image = await controller.imagePick(source);
                 if(image != null) {
+                  setState(() {
+                    source = null;
+                  });
                   Modular.to.pushNamed('/prediction', arguments: {"uid": widget.uid, "image": image});
+                } else {
+                  setState(() {
+                    source = null;
+                  });
                 }
               } on Exception catch(ex) {
                 print(ex);
