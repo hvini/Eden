@@ -1,15 +1,14 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:eden/app/modules/prediction/data/datasource/firebase_datasource.dart';
+import 'package:eden/app/modules/prediction/data/datasource/prediction_datasource.dart';
 import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.dart';
 import 'package:eden/app/modules/prediction/domain/repositories/prediction_repository.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
 class PredictionRepositoryImpl implements PredictionRepository {
-  final FirebaseDataSource firebaseDataSource;
+  final PredictionDataSource firebaseDataSource;
 
   PredictionRepositoryImpl(this.firebaseDataSource);
 
@@ -38,9 +37,6 @@ class PredictionRepositoryImpl implements PredictionRepository {
   }
 
   @override
-  Stream<List<PredictionEntity>> getAllPredictions() => firebaseDataSource.getAllPredictions();
-
-  @override
   Future<DocumentReference> savePrediction(PredictionEntity prediction) async =>
     await firebaseDataSource.savePrediction(prediction);
 
@@ -54,5 +50,5 @@ class PredictionRepositoryImpl implements PredictionRepository {
 
   @override
   Future<void> updatePrediction(String predictionId, Map<String, dynamic> document) async =>
-      await firebaseDataSource.updatePrediction(predictionId, document);
+    await firebaseDataSource.updatePrediction(predictionId, document);
 }

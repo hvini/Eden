@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:eden/app/modules/prediction/data/datasource/firebase_datasource.dart';
+import 'package:eden/app/modules/prediction/data/datasource/prediction_datasource.dart';
 import 'package:eden/app/modules/prediction/data/models/prediction_model.dart';
 import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.dart';
 
-class FirebaseDataSourceImpl implements FirebaseDataSource {
+class FirebaseDataSourceImpl implements PredictionDataSource {
   FirebaseFirestore firestoreInstance;
   FirebaseStorage storageInstance;
   FirebaseAuth auth;
@@ -15,16 +15,6 @@ class FirebaseDataSourceImpl implements FirebaseDataSource {
     this.firestoreInstance = FirebaseFirestore.instance;
     this.storageInstance = FirebaseStorage.instance;
     this.auth = FirebaseAuth.instance;
-  }
-
-  @override
-  Stream<List<PredictionEntity>> getAllPredictions() {
-    final predictionCollectionRef = firestoreInstance.collection("predictions");
-    return predictionCollectionRef.snapshots().map((querySnapshot) {
-      return querySnapshot.docs
-        .map((docQuerySnapshot) => PredictionModel.fromSnapshot(docQuerySnapshot))
-        .toList();
-    });
   }
 
   @override

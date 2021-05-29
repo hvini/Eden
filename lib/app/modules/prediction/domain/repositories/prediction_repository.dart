@@ -8,7 +8,6 @@ abstract class PredictionRepository {
   void loadModel();
   Future<Either<Exception, List<dynamic>>> prediction(PickedFile image);
   Future<DocumentReference> savePrediction(PredictionEntity prediction);
-  Stream<List<PredictionEntity>> getAllPredictions();
   Future<String> uploadFile(File file, String folder, String name, String extension);
   Future<DocumentSnapshot> getPredictionById(String uid);
   Future<void> updatePrediction(String predictionId, Map<String, dynamic> document);

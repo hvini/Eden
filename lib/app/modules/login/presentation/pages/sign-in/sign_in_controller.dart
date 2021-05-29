@@ -11,9 +11,9 @@ part 'sign_in_controller.g.dart';
 class SignInController = _SignInController with _$SignInController;
 
 abstract class _SignInController with Store {
-  final SignIn signInUsecase;
+  final SignIn signInUseCase;
 
-  _SignInController(this.signInUsecase);
+  _SignInController(this.signInUseCase);
 
   @observable
   String email = "";
@@ -31,11 +31,11 @@ abstract class _SignInController with Store {
   UserEntity get credential => UserEntity.user(email: email, password: password);
 
   signIn() async {
-    var result = await signInUsecase(credential);
+    var result = await signInUseCase(credential);
     result.fold((failure) {
       asuka.showSnackBar(SnackBar(content: Text(failure.toString())));
     }, (user) {
-      Modular.to.pushNamed('/feed/', arguments: {"uid": user.uid});
+      Modular.to.pushNamed('/feed/', arguments: { "uid": user.uid });
     });
   }
 }

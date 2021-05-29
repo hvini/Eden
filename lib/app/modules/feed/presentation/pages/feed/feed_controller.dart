@@ -1,4 +1,6 @@
+import 'package:eden/app/modules/feed/domain/usecases/get_user_predictions.dart';
 import 'package:eden/app/modules/feed/domain/usecases/image_pick.dart';
+import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
@@ -10,26 +12,31 @@ class FeedController = _FeedController with _$FeedController;
 
 abstract class _FeedController with Store {
   final ImagePick imagePickUseCase;
+  final GetUserPredictions getUserPredictionsUseCase;
 
-  _FeedController(this.imagePickUseCase);
+  _FeedController(this.imagePickUseCase, this.getUserPredictionsUseCase) {
+    getList(uid);
+  }
 
-  Future<void> imagePick(ImageSource source) async {
-    await imagePickUseCase(source).then((response) {
-      response.fold(
-        (failure) {
-          throw new Exception(failure.toString());
-        }, (PickedFile image) {
-          setImage(image);
-        }
-      );
-      return null;
-    });
-    return null;
+  Future<PickedFile> imagePick(ImageSource source) async {
+    try {
+      return await imagePickUseCase(source);
+    } on Exception catch(ex) {
+      throw new Exception(ex.toString());
+    }
   }
 
   @observable
-  PickedFile image;
+  String uid;
+
+  @observable
+  ObservableStream<List<PredictionEntity>> predictionList;
 
   @action
-  setImage(PickedFile value) => image = value;
+  setUid(String value) => uid = value;
+
+  @action
+  void getList(String uid) {
+    predictionList = getUserPredictionsUseCase(uid).asObservable();
+  }
 }

@@ -1,4 +1,6 @@
+import 'package:eden/app/modules/feed/data/datasource/feed_datasource_impl.dart';
 import 'package:eden/app/modules/feed/data/repositories/feed_repository_impl.dart';
+import 'package:eden/app/modules/feed/domain/usecases/get_user_predictions.dart';
 import 'package:eden/app/modules/feed/domain/usecases/image_pick.dart';
 import 'package:eden/app/modules/feed/presentation/pages/feed/feed_controller.dart';
 import 'package:eden/app/modules/feed/presentation/pages/feed/feed_page.dart';
@@ -8,7 +10,9 @@ class FeedModule extends ChildModule {
   @override
   List<Bind> get binds => [
     Bind((i) => ImagePickImpl(i())),
-    Bind((i) => FeedRepositoryImpl())
+    Bind((i) => FeedRepositoryImpl(i())),
+    Bind((i) => GetUserPredictionsImpl(i())),
+    Bind((i) => FeedDataSourceImpl())
   ];
 
   List<Bind> export = [
