@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:asuka/asuka.dart' as asuka;
 
 class FeedPage extends StatefulWidget {
   final String uid;
@@ -31,12 +32,19 @@ class _FeedPageState extends ModularState<FeedPage, FeedController> {
     return false;
   }
 
-  Widget _appBar() {
+  Widget _appBar(BuildContext context) {
     return new AppBar(
       title: Text("My garden"),
       leading: new IconButton(
         icon: new Icon(Icons.logout),
-        onPressed: () => {  }
+        onPressed: () => {
+          controller.signOut().then((_) {
+            Modular.to.pushNamed("/login");
+            asuka.showSnackBar(SnackBar(content: Text("Successfully signed out!")));
+          }).catchError((err) {
+            print(err);
+          })
+        }
       ),
     );
   }
@@ -83,7 +91,7 @@ class _FeedPageState extends ModularState<FeedPage, FeedController> {
       onWillPop: _onWillPop,
       child: Scaffold(
         backgroundColor: backgroundColor,
-        appBar: _appBar(),
+        appBar: _appBar(context),
         body: Observer(builder: (_) {
           if(controller.predictionList.hasError || controller.predictionList.data == null) {
             return Container();

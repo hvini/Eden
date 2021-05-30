@@ -33,8 +33,12 @@ abstract class _SignInController with Store {
   signIn() async {
     var result = await signInUseCase(credential);
     result.fold((failure) {
+      setEmail("");
+      setPassword("");
       asuka.showSnackBar(SnackBar(content: Text(failure.toString())));
     }, (user) {
+      setEmail("");
+      setPassword("");
       Modular.to.pushNamed('/feed/', arguments: { "uid": user.uid });
     });
   }

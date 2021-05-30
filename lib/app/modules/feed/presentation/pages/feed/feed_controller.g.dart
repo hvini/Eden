@@ -7,7 +7,7 @@ part of 'feed_controller.dart';
 // **************************************************************************
 
 final $FeedController = BindInject(
-        (i) => FeedController(i<ImagePick>(), i<GetUserPredictions>()),
+        (i) => FeedController(i<ImagePick>(), i<GetUserPredictions>(), i<SignOut>()),
     singleton: true,
     lazy: true
 );

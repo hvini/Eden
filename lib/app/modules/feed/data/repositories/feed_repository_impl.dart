@@ -19,4 +19,9 @@ class FeedRepositoryImpl implements FeedRepository {
   Stream<List<PredictionEntity>> getUserPredictions(String uid) {
     return feedDataSource.getUserPredictions(uid);
   }
+
+  @override
+  Future<void> signOut() async {
+    await feedDataSource.signOut();
+  }
 }

@@ -2,4 +2,5 @@ import 'package:eden/app/modules/prediction/domain/entities/prediction_entity.da
 
 abstract class FeedDataSource {
   Stream<List<PredictionEntity>> getUserPredictions(String uid);
+  Future<void> signOut();
 }

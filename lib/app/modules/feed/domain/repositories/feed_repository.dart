@@ -4,4 +4,5 @@ import 'package:image_picker/image_picker.dart';
 abstract class FeedRepository {
   Future<PickedFile> imagePick(ImageSource source);
   Stream<List<PredictionEntity>> getUserPredictions(String uid);
+  Future<void> signOut();
 }

@@ -34,8 +34,12 @@ abstract class _SignUpController with Store {
   signUp() async {
     var result = await signUpUseCase(credential);
     result.fold((failure) {
+      setEmail("");
+      setPassword("");
       asuka.showSnackBar(SnackBar(content: Text(failure.toString())));
     }, (user) {
+      setEmail("");
+      setPassword("");
       Modular.to.pushNamed('/feed/', arguments: { "uid": user.uid });
     });
   }
